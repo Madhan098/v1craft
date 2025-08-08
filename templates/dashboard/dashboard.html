@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EventCraft Pro{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="display-6 fw-bold">Welcome back, {{ session.user_name if session.user_name else 'User' }}!</h1>
+                        <p class="lead text-muted">Manage your invitations and track responses</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('create_invitation') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>Create New Invitation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Total Invitations</h5>
+                                <h2 class="display-6 fw-bold">{{ invitations|length }}</h2>
+                            </div>
+                            <i class="fas fa-calendar-alt fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Total Views</h5>
+                                <h2 class="display-6 fw-bold">{{ invitations|sum(attribute='view_count') }}</h2>
+                            </div>
+                            <i class="fas fa-eye fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Total RSVPs</h5>
+                                <h2 class="display-6 fw-bold">
+                                    {% set total_rsvps = 0 %}
+                                    {% for invitation in invitations %}
+                                        {% set total_rsvps = total_rsvps + invitation.rsvps|length %}
+                                    {% endfor %}
+                                    {{ total_rsvps }}
+                                </h2>
+                            </div>
+                            <i class="fas fa-users fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Active Events</h5>
+                                <h2 class="display-6 fw-bold">{{ invitations|selectattr('is_active')|list|length }}</h2>
+                            </div>
+                            <i class="fas fa-star fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invitations List -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Your Invitations</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if invitations %}
+                            <div class="row g-4">
+                                {% for invitation in invitations %}
+                                    {% set event_data = invitation.event_data|fromjson %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div>
+                                                        <span class="badge bg-{{ 'danger' if invitation.event_type == 'wedding' else 'warning' if invitation.event_type == 'birthday' else 'info' if invitation.event_type == 'babyshower' else 'success' if invitation.event_type == 'graduation' else 'secondary' }} mb-2">
+                                                            {{ invitation.event_type.title() }}
+                                                        </span>
+                                                        <h5 class="card-title">{{ event_data.eventTitle }}</h5>
+                                                    </div>
+                                                </div>
+                                                
+                                                <p class="card-text text-muted">
+                                                    <i class="fas fa-calendar me-2"></i>{{ event_data.eventDate }}<br>
+                                                    <i class="fas fa-clock me-2"></i>{{ event_data.eventTime }}<br>
+                                                    <i class="fas fa-map-marker-alt me-2"></i>{{ event_data.venue }}
+                                                </p>
+                                                
+                                                <div class="row text-center mb-3">
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">Views</small>
+                                                        <strong>{{ invitation.view_count }}</strong>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">RSVPs</small>
+                                                        <strong>{{ invitation.rsvps|length }}</strong>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted d-block">Status</small>
+                                                        <span class="badge bg-{{ 'success' if invitation.is_active else 'secondary' }}">
+                                                            {{ 'Active' if invitation.is_active else 'Inactive' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ url_for('view_invitation', share_url=invitation.share_url) }}" 
+                                                       class="btn btn-outline-primary btn-sm flex-fill" target="_blank">
+                                                        <i class="fas fa-eye me-1"></i>View
+                                                    </a>
+                                                    <a href="{{ url_for('view_invitation_manage', invitation_id=invitation.id) }}" 
+                                                       class="btn btn-primary btn-sm flex-fill">
+                                                        <i class="fas fa-cog me-1"></i>Manage
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-muted">
+                                                <small>Created {{ invitation.created_at.strftime('%B %d, %Y') }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+                                <h4>No Invitations Yet</h4>
+                                <p class="text-muted mb-4">Create your first invitation to get started!</p>
+                                <a href="{{ url_for('create_invitation') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>Create Your First Invitation
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

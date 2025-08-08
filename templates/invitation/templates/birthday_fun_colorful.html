@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event_data.eventTitle }} - Birthday Party Invitation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF69B4;
+            --secondary-color: #FF1493;
+            --accent-color: #FFD700;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #FFF0F5;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(255, 20, 147, 0.1) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23FF69B4" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .hero-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .birthday-symbol {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .birthday-person-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .birthday-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .birthday-person {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+        }
+        
+        .person-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+        
+        .person-age {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .person-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .party-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+        }
+        
+        .party-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .party-details {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--accent-color);
+        }
+        
+        .party-title-small {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .party-time {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .party-venue {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .activities-section {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .activities-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .activity-item {
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .activity-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .rsvp-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+        }
+        
+        .rsvp-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .rsvp-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--accent-color);
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        .floating-balloons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .balloon {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .birthday-person {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Gallery Styles */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: white;
+            padding: 10px;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: rgba(255, 105, 180, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            background: rgba(0, 0, 0, 0.9) !important;
+        }
+        
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Balloons -->
+    <div class="floating-balloons">
+        <div class="balloon" style="top: 10%; left: 10%; animation-delay: 0s;">🎈</div>
+        <div class="balloon" style="top: 20%; right: 15%; animation-delay: 1s;">🎈</div>
+        <div class="balloon" style="top: 60%; left: 5%; animation-delay: 2s;">🎈</div>
+        <div class="balloon" style="top: 40%; right: 10%; animation-delay: 3s;">🎈</div>
+        <div class="balloon" style="top: 80%; left: 20%; animation-delay: 4s;">🎈</div>
+    </div>
+
+    <!-- Hero Section with Main Image Background -->
+    <section class="hero-section" style="background-image: url('{% if event_data.mainImage %}{{ url_for('static', filename='uploads/' + event_data.mainImage) }}{% elif invitation.main_image %}{{ url_for('static', filename='uploads/' + invitation.main_image) }}{% else %}data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'><rect width='1200' height='800' fill='%23FFF0F5'/><text x='600' y='400' text-anchor='middle' font-family='Fredoka One' font-size='48' fill='%23FF69B4'>Birthday Party</text></svg>{% endif %}'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="hero-content">
+                <div class="religion-icon mb-3" style="font-size:2.5rem;">
+                    {% set rel = invitation.template.religious_type if invitation.template and invitation.template.religious_type else event_data.religiousType %}
+                    {% if rel == 'hindu' %}
+                        🕉️ <span class="fs-5 align-middle ms-2">Hindu</span>
+                    {% elif rel == 'muslim' %}
+                        ☪️ <span class="fs-5 align-middle ms-2">Muslim</span>
+                    {% elif rel == 'christian' %}
+                        ✝️ <span class="fs-5 align-middle ms-2">Christian</span>
+                    {% else %}
+                        🌍 <span class="fs-5 align-middle ms-2">General</span>
+                    {% endif %}
+                </div>
+                <h1 class="hero-title" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{{ event_data.familyName }}</h1>
+                <p class="hero-subtitle" style="font-size: 1.5rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">is inviting you</p>
+                <div class="birthday-symbol">🎂</div>
+                <h2 class="hero-title" style="font-size: 2.5rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">IT'S MY BIRTHDAY!</h1>
+                <p class="hero-subtitle" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">Save The Date</p>
+                <h3 class="hero-title" style="font-size: 2rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                    {{ event_data.eventDate }}
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Birthday Person Section -->
+    <section class="birthday-person-section">
+        <div class="container">
+            <h2 class="birthday-title">Birthday Celebrant</h2>
+            <div class="birthday-person">
+                {% if event_data.birthdayPersonPhoto %}
+                    <img src="{{ url_for('static', filename='uploads/' + event_data.birthdayPersonPhoto) }}" 
+                         alt="Birthday Person" class="person-photo" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid white; margin-bottom: 1rem;">
+                {% else %}
+                    <div class="person-photo d-flex align-items-center justify-content-center bg-white" style="width: 150px; height: 150px; border-radius: 50%; border: 5px solid white; margin: 0 auto 1rem;">
+                        <i class="fas fa-user fa-3x text-muted"></i>
+                    </div>
+                {% endif %}
+                <h3 class="person-name">{{ event_data.birthdayPerson }}</h3>
+                <p class="person-age">Turning {{ event_data.age or "25" }} Years Old!</p>
+                <p class="person-desc">{{ event_data.description or "Join us for a fun-filled celebration!" }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="party-section">
+        <div class="container">
+            <h2 class="party-title">Welcome to the Party!</h2>
+            <p class="text-center" style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem;">
+                {{ event_data.description or "Come celebrate with us and make this birthday unforgettable!" }}
+            </p>
+        </div>
+    </section>
+
+    <!-- Party Details -->
+    <section class="party-section">
+        <div class="container">
+            <h2 class="party-title">When & Where</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="party-details">
+                        <h3 class="party-title-small">Birthday Party</h3>
+                        <p class="party-time">{{ event_data.partyTime or "Evening" }}</p>
+                        <p class="party-venue">{{ event_data.partyVenue or "Party Venue" }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="party-details">
+                        <h3 class="party-title-small">Dress Code</h3>
+                        <p class="party-time">{{ event_data.dressCode or "Casual & Colorful" }}</p>
+                        <p class="party-venue">Come in your favorite colors!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activities Section -->
+    <section class="activities-section">
+        <div class="container">
+            <h2 class="activities-title">Fun Activities</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="activity-item">
+                        <div class="activity-icon">🎵</div>
+                        <p>Music & Dance</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="activity-item">
+                        <div class="activity-icon">🎮</div>
+                        <p>Games & Fun</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="activity-item">
+                        <div class="activity-icon">🍰</div>
+                        <p>Cake Cutting</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="activity-item">
+                        <div class="activity-icon">📸</div>
+                        <p>Photo Booth</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    {% if invitation.gallery_images and invitation.gallery_images != '[]' %}
+    <section class="activities-section">
+        <div class="container">
+            <h2 class="activities-title">Our Gallery</h2>
+            <p class="text-center text-muted mb-4">All Birthday Memories & Celebrations</p>
+            <div class="row g-3">
+                {% set gallery_list = invitation.gallery_images | tojson | from_json %}
+                {% for image in gallery_list %}
+                  {% if image %}
+                    <div class="col-md-4 col-lg-3">
+                      <div class="gallery-item" onclick="openGalleryModal('{{ url_for('static', filename='uploads/' + image) }}')">
+                        <img src="{{ url_for('static', filename='uploads/' + image) }}" class="img-fluid gallery-image" alt="Gallery Image">
+                        <div class="gallery-overlay">
+                          <i class="fas fa-search-plus fa-2x text-white"></i>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery Modal -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Gallery Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- RSVP Section -->
+    <section class="rsvp-section">
+        <div class="container">
+            <h2 class="rsvp-title">Be Our Guest</h2>
+            <p class="text-center" style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem;">
+                Please RSVP before {{ event_data.rsvpDeadline or "the party date" }}
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <button class="btn btn-success btn-lg me-2 mb-2" onclick="addToGoogleCalendar()">
+                        <i class="fas fa-check-circle me-1"></i> Attending
+                    </button>
+                    <button class="btn btn-outline-danger btn-lg me-2 mb-2" onclick="notAttending()">
+                        <i class="fas fa-times-circle me-1"></i> Not Attending
+                    </button>
+                    <button class="btn btn-primary btn-lg mb-2" onclick="openLocation()">
+                        <i class="fas fa-map-marker-alt me-1"></i> Location
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    function addToGoogleCalendar() {
+        const eventTitle = '{{ event_data.eventTitle }}';
+        const eventDate = '{{ event_data.eventDate }}';
+        const eventTime = '{{ event_data.eventTime }}';
+        const venue = '{{ event_data.venue }}';
+        const address = '{{ event_data.address or "" }}';
+        const description = '{{ event_data.description or "Birthday Party Invitation" }}';
+        // Format date for Google Calendar
+        const dateObj = new Date(eventDate + ' ' + eventTime);
+        const startDate = dateObj.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        // Add 3 hours for end time
+        const endDate = new Date(dateObj.getTime() + (3 * 60 * 60 * 1000));
+        const endDateStr = endDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const location = address ? `${venue}, ${address}` : venue;
+        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDateStr}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
+        window.open(googleCalendarUrl, '_blank');
+    }
+    function notAttending() {
+        alert('Thank you for your response!');
+    }
+    function openLocation() {
+        const venue = '{{ event_data.venue }}';
+        const address = '{{ event_data.address or "" }}';
+        const fullAddress = address ? `${venue}, ${address}` : venue;
+        const encodedAddress = encodeURIComponent(fullAddress);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    }
+    
+    // Gallery Modal Function
+    function openGalleryModal(imageSrc) {
+        document.getElementById('modalImage').src = imageSrc;
+        const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+        modal.show();
+    }
+    </script>
+    <!-- End RSVP Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">Thank You For Celebrating With Us! 🎉</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

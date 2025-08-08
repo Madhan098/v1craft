@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Header Section -->
+<header class="hero-header text-center py-5" style="background-color: #1a237e; color: white;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-1 fw-bold mb-4" style="color: #ffffff; font-size: 4rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                    <span style="color: #ffd700;">✨ EventCraft Pro ✨</span>
+                </h1>
+                <h2 class="display-4 fw-bold mb-4" style="color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+                    Create <span style="color: #ff6b6b;">Beautiful</span> 
+                    <span style="color: #4ecdc4;">Digital</span> 
+                    <span style="color: #45b7d1;">Invitations</span>
+                </h2>
+                <p class="lead mb-5" style="color: #ffffff; font-size: 1.5rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                    Design <span style="color: #ffd700; font-weight: bold;">stunning</span> event invitations with our 
+                    <span style="color: #ff6b6b; font-weight: bold;">professional</span> templates. Perfect for 
+                    <span style="color: #4ecdc4; font-weight: bold;">weddings</span>, 
+                    <span style="color: #45b7d1; font-weight: bold;">birthdays</span>, 
+                    <span style="color: #96ceb4; font-weight: bold;">anniversaries</span>, and more!
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    {% if not session.user_id %}
+                        <a href="{{ url_for('auth') }}" class="btn btn-warning btn-lg shadow-lg" style="font-size: 1.3rem; padding: 15px 30px; border-radius: 50px; color: #000;">
+                            <i class="fas fa-rocket me-2"></i><strong>Get Started Now!</strong>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('create_invitation') }}" class="btn btn-success btn-lg shadow-lg" style="font-size: 1.3rem; padding: 15px 30px; border-radius: 50px;">
+                            <i class="fas fa-plus me-2"></i><strong>Create Invitation</strong>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="text-center">
+                    <i class="fas fa-calendar-alt" style="font-size: 8rem; color: #ffd700; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Features Section -->
+<section class="py-5" style="background: linear-gradient(45deg, #f8f9fa 0%, #e9ecef 100%);">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3" style="color: #2c3e50;">
+                    Why Choose <span style="color: #e74c3c;">Event</span><span style="color: #3498db;">Craft</span> <span style="color: #f39c12;">Pro</span>?
+                </h2>
+                <p class="lead" style="color: #34495e; font-size: 1.3rem;">
+                    Everything you need to create and manage <span style="color: #e74c3c; font-weight: bold;">perfect</span> event invitations
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-palette fa-3x" style="color: #ffd700;"></i>
+                        </div>
+                        <h4 class="card-title" style="color: #ffffff; font-weight: bold;">Beautiful Templates</h4>
+                        <p class="card-text" style="color: #f8f9fa;">Choose from <span style="color: #ffd700; font-weight: bold;">professionally designed</span> templates for every occasion. Customize colors, fonts, and layouts.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-lg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-share-alt fa-3x" style="color: #ffffff;"></i>
+                        </div>
+                        <h4 class="card-title" style="color: #ffffff; font-weight: bold;">Easy Sharing</h4>
+                        <p class="card-text" style="color: #f8f9fa;">Share your invitations <span style="color: #ffd700; font-weight: bold;">instantly</span> via unique URLs. Track views and engagement in real-time.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-lg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-users fa-3x" style="color: #ffffff;"></i>
+                        </div>
+                        <h4 class="card-title" style="color: #ffffff; font-weight: bold;">RSVP Management</h4>
+                        <p class="card-text" style="color: #f8f9fa;">Collect and manage guest responses <span style="color: #ffd700; font-weight: bold;">effortlessly</span>. Get detailed analytics and guest lists.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Event Types Section -->
+<section class="py-5" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #a29bfe 100%);">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3" style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                    Perfect for <span style="color: #ffd700;">Every</span> <span style="color: #ff6b6b;">Occasion</span>
+                </h2>
+                <p class="lead" style="color: #f8f9fa; font-size: 1.3rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                    Create invitations for all your <span style="color: #ffd700; font-weight: bold;">special events</span>
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #ff6b6b;">
+                    <i class="fas fa-heart fa-3x mb-3" style="color: #ff6b6b;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Weddings</h4>
+                    <p style="color: #34495e;">Elegant wedding invitations for your <span style="color: #ff6b6b; font-weight: bold;">special day</span></p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #f39c12;">
+                    <i class="fas fa-birthday-cake fa-3x mb-3" style="color: #f39c12;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Birthday Parties</h4>
+                    <p style="color: #34495e;">Fun and <span style="color: #f39c12; font-weight: bold;">colorful</span> birthday celebration invites</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #3498db;">
+                    <i class="fas fa-baby fa-3x mb-3" style="color: #3498db;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Baby Showers</h4>
+                    <p style="color: #34495e;">Sweet and <span style="color: #3498db; font-weight: bold;">adorable</span> baby shower invitations</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #27ae60;">
+                    <i class="fas fa-graduation-cap fa-3x mb-3" style="color: #27ae60;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Graduations</h4>
+                    <p style="color: #34495e;">Celebrate <span style="color: #27ae60; font-weight: bold;">academic achievements</span> in style</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #9b59b6;">
+                    <i class="fas fa-heart fa-3x mb-3" style="color: #9b59b6;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Anniversaries</h4>
+                    <p style="color: #34495e;">Honor years of <span style="color: #9b59b6; font-weight: bold;">love and togetherness</span></p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="event-type-card text-center p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: 3px solid #7f8c8d;">
+                    <i class="fas fa-chair fa-3x mb-3" style="color: #7f8c8d;"></i>
+                    <h4 style="color: #2c3e50; font-weight: bold;">Retirement</h4>
+                    <p style="color: #34495e;">Celebrate years of <span style="color: #7f8c8d; font-weight: bold;">dedicated service</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff9ff3 100%);">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-3" style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            Ready to Create Your <span style="color: #ffd700;">First</span> <span style="color: #4ecdc4;">Invitation</span>?
+        </h2>
+        <p class="lead mb-4" style="color: #f8f9fa; font-size: 1.3rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+            Join <span style="color: #ffd700; font-weight: bold;">thousands</span> of users who trust 
+            <span style="color: #4ecdc4; font-weight: bold;">EventCraft Pro</span> for their special occasions
+        </p>
+        {% if not session.user_id %}
+            <a href="{{ url_for('auth') }}" class="btn btn-warning btn-lg shadow-lg" style="font-size: 1.3rem; padding: 15px 30px; border-radius: 50px;">
+                <i class="fas fa-user-plus me-2"></i><strong>Sign Up Now</strong>
+            </a>
+        {% else %}
+            <a href="{{ url_for('create_invitation') }}" class="btn btn-success btn-lg shadow-lg" style="font-size: 1.3rem; padding: 15px 30px; border-radius: 50px;">
+                <i class="fas fa-plus me-2"></i><strong>Create Your Invitation</strong>
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

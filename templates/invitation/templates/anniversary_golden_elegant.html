@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event_data.eventTitle }} - Anniversary Celebration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #B8860B;
+            --accent-color: #DAA520;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #FFF8DC;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(184, 134, 11, 0.1) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23FFD700" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .anniversary-symbol {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .couple-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .couple-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .couple-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+        
+        .person-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .person-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .person-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .years-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+        }
+        
+        .years-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .years-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .story-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+        }
+        
+        .story-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .story-timeline {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--accent-color);
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .timeline-year {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-right: 2rem;
+            min-width: 100px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-desc {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .celebration-section {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .celebration-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .celebration-details {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .celebration-title-small {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .celebration-time {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .celebration-venue {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .rsvp-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+        }
+        
+        .rsvp-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .rsvp-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--accent-color);
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .couple-info {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .person-card {
+                padding: 1.5rem;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .timeline-year {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Gallery Styles */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(212, 175, 55, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            background: rgba(0, 0, 0, 0.9) !important;
+        }
+        
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Main Image Background -->
+    <section class="hero-section" style="background-image: url('{% if event_data.mainImage %}{{ url_for('static', filename='uploads/' + event_data.mainImage) }}{% elif invitation.main_image %}{{ url_for('static', filename='uploads/' + invitation.main_image) }}{% else %}data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'><rect width='1200' height='800' fill='%23FFF8DC'/><text x='600' y='400' text-anchor='middle' font-family='Playfair Display' font-size='48' fill='%23DAA520'>Anniversary</text></svg>{% endif %}'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="hero-content">
+                <div class="religion-icon mb-3" style="font-size:2.5rem;">
+                    {% set rel = invitation.template.religious_type if invitation.template and invitation.template.religious_type else event_data.religiousType %}
+                    {% if rel == 'hindu' %}
+                        🕉️ <span class="fs-5 align-middle ms-2">Hindu</span>
+                    {% elif rel == 'muslim' %}
+                        ☪️ <span class="fs-5 align-middle ms-2">Muslim</span>
+                    {% elif rel == 'christian' %}
+                        ✝️ <span class="fs-5 align-middle ms-2">Christian</span>
+                    {% else %}
+                        🌍 <span class="fs-5 align-middle ms-2">General</span>
+                    {% endif %}
+                </div>
+                <h1 class="hero-title" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{{ event_data.familyName }}</h1>
+                <p class="hero-subtitle" style="font-size: 1.5rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">is inviting you</p>
+                <div class="anniversary-symbol">💑</div>
+                <h2 class="hero-title" style="font-size: 2.5rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">ANNIVERSARY CELEBRATION</h2>
+                <p class="hero-subtitle" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">Save Our Date</p>
+                <h3 class="hero-title" style="font-size: 2rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                    {{ event_data.eventDate }}
+                </h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Couple Section -->
+    <section class="couple-section">
+        <div class="container">
+            <h2 class="couple-title">Happy Couple</h2>
+            <div class="couple-info">
+                <div class="person-card">
+                    <h3 class="person-name">{{ event_data.husbandName }}</h3>
+                    <p class="person-desc">{{ event_data.husbandDescription or "Loving husband" }}</p>
+                </div>
+                <div class="person-card">
+                    <h3 class="person-name">{{ event_data.wifeName }}</h3>
+                    <p class="person-desc">{{ event_data.wifeDescription or "Beloved wife" }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Years Section -->
+    <section class="years-section">
+        <div class="container">
+            <h2 class="years-title">Celebrating</h2>
+            <div class="years-number">{{ event_data.years or "25" }} Years</div>
+            <p class="text-center" style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem;">
+                {{ event_data.description or "Join us in celebrating our journey of love and togetherness." }}
+            </p>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section">
+        <div class="container">
+            <h2 class="story-title">Our Love Story</h2>
+            <div class="story-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ event_data.marriageYear or "1999" }}</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">The Beginning</h3>
+                        <p class="timeline-desc">When we first said "I do" and began our journey together</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ event_data.firstMilestone or "2005" }}</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">First Milestone</h3>
+                        <p class="timeline-desc">Celebrating our first major milestone together</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ event_data.secondMilestone or "2015" }}</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">Silver Anniversary</h3>
+                        <p class="timeline-desc">Marking 25 years of love and commitment</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ event_data.eventDate or "2024" }}</div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">Golden Celebration</h3>
+                        <p class="timeline-desc">Celebrating another beautiful year of togetherness</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    {% if invitation.gallery_images and invitation.gallery_images != '[]' %}
+    <section class="story-section">
+        <div class="container">
+            <h2 class="story-title">Our Gallery</h2>
+            <p class="text-center text-muted mb-4">All Anniversary Memories & Celebrations</p>
+            <div class="row g-3">
+                {% set gallery_list = invitation.gallery_images | tojson | from_json %}
+                {% for image in gallery_list %}
+                  {% if image %}
+                    <div class="col-md-4 col-lg-3">
+                      <div class="gallery-item" onclick="openGalleryModal('{{ url_for('static', filename='uploads/' + image) }}')">
+                        <img src="{{ url_for('static', filename='uploads/' + image) }}" class="img-fluid gallery-image" alt="Gallery Image">
+                        <div class="gallery-overlay">
+                          <i class="fas fa-search-plus fa-2x text-white"></i>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery Modal -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Gallery Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Celebration Details -->
+    <section class="celebration-section">
+        <div class="container">
+            <h2 class="celebration-title">When & Where</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="celebration-details">
+                        <h3 class="celebration-title-small">Anniversary Dinner</h3>
+                        <p class="celebration-time">{{ event_data.dinnerTime or "Evening" }}</p>
+                        <p class="celebration-venue">{{ event_data.dinnerVenue or "Restaurant" }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="celebration-details">
+                        <h3 class="celebration-title-small">Celebration Party</h3>
+                        <p class="celebration-time">{{ event_data.partyTime or "Night" }}</p>
+                        <p class="celebration-venue">{{ event_data.partyVenue or "Party Venue" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section class="rsvp-section">
+        <div class="container">
+            <h2 class="rsvp-title">Be Our Guest</h2>
+            <p class="text-center" style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem;">
+                Please RSVP before {{ event_data.rsvpDeadline or "the celebration date" }}
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <button class="btn btn-success btn-lg me-2 mb-2" onclick="addToGoogleCalendar()">
+                        <i class="fas fa-check-circle me-1"></i> Attending
+                    </button>
+                    <button class="btn btn-outline-danger btn-lg me-2 mb-2" onclick="notAttending()">
+                        <i class="fas fa-times-circle me-1"></i> Not Attending
+                    </button>
+                    <button class="btn btn-primary btn-lg mb-2" onclick="openLocation()">
+                        <i class="fas fa-map-marker-alt me-1"></i> Location
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    function addToGoogleCalendar() {
+        const eventTitle = '{{ event_data.eventTitle }}';
+        const eventDate = '{{ event_data.eventDate }}';
+        const eventTime = '{{ event_data.eventTime }}';
+        const venue = '{{ event_data.venue }}';
+        const address = '{{ event_data.address or "" }}';
+        const description = '{{ event_data.description or "Anniversary Invitation" }}';
+        // Format date for Google Calendar
+        const dateObj = new Date(eventDate + ' ' + eventTime);
+        const startDate = dateObj.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        // Add 3 hours for end time
+        const endDate = new Date(dateObj.getTime() + (3 * 60 * 60 * 1000));
+        const endDateStr = endDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const location = address ? `${venue}, ${address}` : venue;
+        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDateStr}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
+        window.open(googleCalendarUrl, '_blank');
+    }
+    function notAttending() {
+        alert('Thank you for your response!');
+    }
+    function openLocation() {
+        const venue = '{{ event_data.venue }}';
+        const address = '{{ event_data.address or "" }}';
+        const fullAddress = address ? `${venue}, ${address}` : venue;
+        const encodedAddress = encodeURIComponent(fullAddress);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    }
+    
+    // Gallery Modal Function
+    function openGalleryModal(imageSrc) {
+        document.getElementById('modalImage').src = imageSrc;
+        const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+        modal.show();
+    }
+    </script>
+    <!-- End RSVP Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">Thank You For Celebrating With Us</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

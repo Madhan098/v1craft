@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Login / Register - EventCraft Pro{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <!-- Navigation Tabs -->
+                        <ul class="nav nav-pills nav-fill mb-4" id="authTabs">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register" type="button">
+                                    <i class="fas fa-user-plus me-2"></i>Register
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Login Form -->
+                            <div class="tab-pane fade show active" id="login">
+                                <h3 class="text-center mb-4">Welcome Back!</h3>
+                                <form method="POST" action="{{ url_for('login') }}">
+                                    <div class="mb-3">
+                                        <label for="login-email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control form-control-lg" id="login-email" name="email" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="login-password" class="form-label">Password</label>
+                                        <input type="password" class="form-control form-control-lg" id="login-password" name="password" required>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Register Form -->
+                            <div class="tab-pane fade" id="register">
+                                <h3 class="text-center mb-4">Create Account</h3>
+                                <form method="POST" action="{{ url_for('register') }}">
+                                    <div class="mb-3">
+                                        <label for="register-name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control form-control-lg" id="register-name" name="name" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control form-control-lg" id="register-email" name="email" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-mobile" class="form-label">Mobile Number</label>
+                                        <input type="tel" class="form-control form-control-lg" id="register-mobile" name="mobile" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-password" class="form-label">Password</label>
+                                        <input type="password" class="form-control form-control-lg" id="register-password" name="password" required minlength="6">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control form-control-lg" id="register-confirm-password" name="confirm_password" required minlength="6">
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-user-plus me-2"></i>Create Account
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password confirmation validation
+    const registerForm = document.querySelector('#register form');
+    const password = document.getElementById('register-password');
+    const confirmPassword = document.getElementById('register-confirm-password');
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            if (password.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                confirmPassword.focus();
+            }
+        });
+    }
+    
+    // Real-time password confirmation check
+    if (confirmPassword) {
+        confirmPassword.addEventListener('input', function() {
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

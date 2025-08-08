@@ -1,0 +1,813 @@
+{% extends "base.html" %}
+
+{% block title %}Create Invitation - EventCraft Pro{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="display-6 fw-bold">Create New Invitation</h1>
+                <p class="lead text-muted">Fill in your event details to get started</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('create_invitation_post') }}" enctype="multipart/form-data" onsubmit="return validateForm()">
+                            <!-- Event Type Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Event Type *</label>
+                                <div class="row g-3">
+                                    {% for event_type in event_types %}
+                                        <div class="col-md-4">
+                                            <input type="radio" class="btn-check" name="eventType" id="event-{{ event_type.name }}" 
+                                                   value="{{ event_type.name }}" required onchange="showEventForm('{{ event_type.name }}')">
+                                            <label class="btn btn-outline-primary w-100 p-3" for="event-{{ event_type.name }}">
+                                                <i class="{{ event_type.icon }} fa-2x d-block mb-2" style="color: {{ event_type.color }};"></i>
+                                                <strong>{{ event_type.display_name }}</strong>
+                                                <small class="d-block text-muted">{{ event_type.description }}</small>
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Event Details Form (Initially Hidden) -->
+                            <div id="eventDetailsForm" style="display: none;">
+                                <!-- Religious Type Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Religious/Cultural Type *</label>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <input type="radio" class="btn-check" name="religiousType" id="religious-hindu" 
+                                                   value="hindu" required>
+                                            <label class="btn btn-outline-success w-100 p-3" for="religious-hindu">
+                                                <div class="fs-2 mb-2">🕉️</div>
+                                                <strong>Hindu</strong>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="radio" class="btn-check" name="religiousType" id="religious-muslim" 
+                                                   value="muslim" required>
+                                            <label class="btn btn-outline-success w-100 p-3" for="religious-muslim">
+                                                <div class="fs-2 mb-2">☪️</div>
+                                                <strong>Muslim</strong>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="radio" class="btn-check" name="religiousType" id="religious-christian" 
+                                                   value="christian" required>
+                                            <label class="btn btn-outline-success w-100 p-3" for="religious-christian">
+                                                <div class="fs-2 mb-2">✝️</div>
+                                                <strong>Christian</strong>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="radio" class="btn-check" name="religiousType" id="religious-general" 
+                                                   value="general" required>
+                                            <label class="btn btn-outline-success w-100 p-3" for="religious-general">
+                                                <div class="fs-2 mb-2">🌍</div>
+                                                <strong>General</strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <!-- Family Information -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="familyName" class="form-label fw-semibold">Family Name *</label>
+                                    <input type="text" class="form-control form-control-lg" id="familyName" name="familyName" 
+                                           placeholder="e.g., The Sharma Family" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mainImage" class="form-label fw-semibold">Main Photo (Hero Image)</label>
+                                    <div class="image-upload-container">
+                                        <input type="file" class="form-control form-control-lg" id="mainImage" name="mainImage" 
+                                               accept="image/*" onchange="previewImage(this, 'mainImagePreview')">
+                                        <div class="form-text">This will be the main background image for your invitation</div>
+                                        <div id="mainImagePreview" class="image-preview mt-2" style="display: none;">
+                                            <img src="" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Basic Event Information -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="eventTitle" class="form-label fw-semibold">Event Title *</label>
+                                    <input type="text" class="form-control form-control-lg" id="eventTitle" name="eventTitle" 
+                                           placeholder="e.g., Sarah & John's Wedding" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="eventDate" class="form-label fw-semibold">Event Date *</label>
+                                    <input type="date" class="form-control form-control-lg" id="eventDate" name="eventDate" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="eventTime" class="form-label fw-semibold">Event Time *</label>
+                                    <input type="time" class="form-control form-control-lg" id="eventTime" name="eventTime" required>
+                                </div>
+                            </div>
+
+                            <!-- Venue Information -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="venue" class="form-label fw-semibold">Venue Name *</label>
+                                    <input type="text" class="form-control form-control-lg" id="venue" name="venue" 
+                                           placeholder="e.g., Grand Ballroom" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label fw-semibold">Venue Address *</label>
+                                    <input type="text" class="form-control form-control-lg" id="address" name="address" 
+                                           placeholder="Full address with city, state" required>
+                                </div>
+                            </div>
+
+                            <!-- Event Description -->
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-semibold">Event Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" 
+                                          placeholder="Add any special instructions, dress code, or additional details..."></textarea>
+                            </div>
+
+                            <!-- Wedding Specific Fields -->
+                            <div id="weddingFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-heart me-2"></i>Wedding Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Couple Names -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="brideName" class="form-label fw-semibold">Bride's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="brideName" name="brideName" 
+                                                       placeholder="Bride's full name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="groomName" class="form-label fw-semibold">Groom's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="groomName" name="groomName" 
+                                                       placeholder="Groom's full name">
+                                            </div>
+                                        </div>
+
+                                        <!-- Couple Photos -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-4">
+                                                <label for="bridePhoto" class="form-label fw-semibold">Bride's Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="bridePhoto" name="bridePhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'bridePhotoPreview')">
+                                                    <div class="form-text">Individual photo of the bride</div>
+                                                    <div id="bridePhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Bride Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="groomPhoto" class="form-label fw-semibold">Groom's Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="groomPhoto" name="groomPhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'groomPhotoPreview')">
+                                                    <div class="form-text">Individual photo of the groom</div>
+                                                    <div id="groomPhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Groom Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="couplePhoto" class="form-label fw-semibold">Together Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="couplePhoto" name="couplePhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'couplePhotoPreview')">
+                                                    <div class="form-text">Photo of the couple together</div>
+                                                    <div id="couplePhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Couple Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Wedding Story -->
+                                        <div class="mb-3">
+                                            <label for="weddingStory" class="form-label fw-semibold">Our Story (Optional)</label>
+                                            <textarea class="form-control" id="weddingStory" name="weddingStory" rows="3" 
+                                                      placeholder="Share your love story or how you met..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Birthday Specific Fields -->
+                            <div id="birthdayFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-birthday-cake me-2"></i>Birthday Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Birthday Person -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="birthdayPerson" class="form-label fw-semibold">Birthday Person's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="birthdayPerson" name="birthdayPerson" 
+                                                       placeholder="Name of the birthday person">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="age" class="form-label fw-semibold">Age (Optional)</label>
+                                                <input type="number" class="form-control form-control-lg" id="age" name="age" 
+                                                       placeholder="e.g., 25" min="1" max="120">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Birthday Person Photo -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="birthdayPersonPhoto" class="form-label fw-semibold">Birthday Person's Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="birthdayPersonPhoto" name="birthdayPersonPhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'birthdayPersonPhotoPreview')">
+                                                    <div class="form-text">Photo of the birthday person</div>
+                                                    <div id="birthdayPersonPhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Birthday Person Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Parents Names (for kids) -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="fatherName" class="form-label fw-semibold">Father's Name</label>
+                                                <input type="text" class="form-control form-control-lg" id="fatherName" name="fatherName" 
+                                                       placeholder="Father's name (for kids)">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="motherName" class="form-label fw-semibold">Mother's Name</label>
+                                                <input type="text" class="form-control form-control-lg" id="motherName" name="motherName" 
+                                                       placeholder="Mother's name (for kids)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Anniversary Specific Fields -->
+                            <div id="anniversaryFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-heart me-2"></i>Anniversary Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Couple Names -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="husbandName" class="form-label fw-semibold">Husband's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="husbandName" name="husbandName" 
+                                                       placeholder="Husband's full name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="wifeName" class="form-label fw-semibold">Wife's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="wifeName" name="wifeName" 
+                                                       placeholder="Wife's full name">
+                                            </div>
+                                        </div>
+
+                                        <!-- Anniversary Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="years" class="form-label fw-semibold">Years of Marriage *</label>
+                                                <input type="number" class="form-control form-control-lg" id="years" name="years" 
+                                                       placeholder="e.g., 25" min="1" max="100" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="marriageYear" class="form-label fw-semibold">Marriage Year</label>
+                                                <input type="number" class="form-control form-control-lg" id="marriageYear" name="marriageYear" 
+                                                       placeholder="e.g., 1999" min="1900" max="2024">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Baby Shower Specific Fields -->
+                            <div id="babyshowerFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-baby me-2"></i>Baby Shower Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Parents Names -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="motherName" class="form-label fw-semibold">Mother's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="motherName" name="motherName" 
+                                                       placeholder="Mother's full name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="fatherName" class="form-label fw-semibold">Father's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="fatherName" name="fatherName" 
+                                                       placeholder="Father's full name">
+                                            </div>
+                                        </div>
+
+                                        <!-- Baby Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-4">
+                                                <label for="babyName" class="form-label fw-semibold">Baby's Name (if known)</label>
+                                                <input type="text" class="form-control form-control-lg" id="babyName" name="babyName" 
+                                                       placeholder="Baby's name">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="gender" class="form-label fw-semibold">Gender</label>
+                                                <select class="form-control form-control-lg" id="gender" name="gender">
+                                                    <option value="">Select Gender</option>
+                                                    <option value="Boy">Boy</option>
+                                                    <option value="Girl">Girl</option>
+                                                    <option value="Surprise">Surprise</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="dueDate" class="form-label fw-semibold">Due Date</label>
+                                                <input type="date" class="form-control form-control-lg" id="dueDate" name="dueDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Graduation Specific Fields -->
+                            <div id="graduationFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Graduation Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Graduate Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="graduateName" class="form-label fw-semibold">Graduate's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="graduateName" name="graduateName" 
+                                                       placeholder="Graduate's full name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="degree" class="form-label fw-semibold">Degree *</label>
+                                                <input type="text" class="form-control form-control-lg" id="degree" name="degree" 
+                                                       placeholder="e.g., Bachelor's Degree">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Graduate Photo -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="graduatePhoto" class="form-label fw-semibold">Graduate's Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="graduatePhoto" name="graduatePhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'graduatePhotoPreview')">
+                                                    <div class="form-text">Photo of the graduate in cap and gown</div>
+                                                    <div id="graduatePhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Graduate Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- School Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="school" class="form-label fw-semibold">School/University *</label>
+                                                <input type="text" class="form-control form-control-lg" id="school" name="school" 
+                                                       placeholder="School or university name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="major" class="form-label fw-semibold">Field of Study</label>
+                                                <input type="text" class="form-control form-control-lg" id="major" name="major" 
+                                                       placeholder="e.g., Computer Science">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Retirement Specific Fields -->
+                            <div id="retirementFields" style="display: none;">
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-chair me-2"></i>Retirement Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Honoree Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="honoreeName" class="form-label fw-semibold">Retiring Person's Name *</label>
+                                                <input type="text" class="form-control form-control-lg" id="honoreeName" name="honoreeName" 
+                                                       placeholder="Full name of the retiring person">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="position" class="form-label fw-semibold">Position/Title</label>
+                                                <input type="text" class="form-control form-control-lg" id="position" name="position" 
+                                                       placeholder="e.g., Senior Manager">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Honoree Photo -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="honoreePhoto" class="form-label fw-semibold">Retiring Person's Photo</label>
+                                                <div class="image-upload-container">
+                                                    <input type="file" class="form-control" id="honoreePhoto" name="honoreePhoto" 
+                                                           accept="image/*" onchange="previewImage(this, 'honoreePhotoPreview')">
+                                                    <div class="form-text">Professional photo of the retiring person</div>
+                                                    <div id="honoreePhotoPreview" class="image-preview mt-2" style="display: none;">
+                                                        <img src="" alt="Honoree Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Company Details -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label for="company" class="form-label fw-semibold">Company/Organization</label>
+                                                <input type="text" class="form-control form-control-lg" id="company" name="company" 
+                                                       placeholder="Company or organization name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="startYear" class="form-label fw-semibold">Career Start Year</label>
+                                                <input type="number" class="form-control form-control-lg" id="startYear" name="startYear" 
+                                                       placeholder="e.g., 1985" min="1900" max="2024">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gallery Images -->
+                            <div class="mb-4">
+                                <label for="galleryImages" class="form-label fw-semibold">Gallery Images (2-6 photos)</label>
+                                <div class="image-upload-container">
+                                    <input type="file" class="form-control form-control-lg" id="galleryImages" name="galleryImages" 
+                                           accept="image/*" multiple onchange="previewMultipleImages(this, 'galleryPreview')">
+                                    <div class="form-text">Upload 2-6 images for your invitation gallery. These will be displayed in a beautiful gallery section.</div>
+                                    <div id="galleryPreview" class="gallery-preview mt-3" style="display: none;">
+                                        <h6 class="mb-2">Selected Images:</h6>
+                                        <div class="row g-2" id="galleryPreviewGrid">
+                                            <!-- Preview images will be inserted here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Host Information -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label for="hostName" class="form-label fw-semibold">Host Name *</label>
+                                    <input type="text" class="form-control form-control-lg" id="hostName" name="hostName" 
+                                           value="{{ session.user_name if session.user_name else '' }}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="contactPhone" class="form-label fw-semibold">Contact Phone</label>
+                                    <input type="tel" class="form-control form-control-lg" id="contactPhone" name="contactPhone" 
+                                           placeholder="Phone number for inquiries">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="contactEmail" class="form-label fw-semibold">Contact Email</label>
+                                    <input type="email" class="form-control form-control-lg" id="contactEmail" name="contactEmail" 
+                                           value="{{ session.user_email if session.user_email else '' }}" placeholder="Email for inquiries">
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                </a>
+                                <div>
+                                    <button type="button" class="btn btn-info btn-lg me-2" onclick="previewInvitation()">
+                                        <i class="fas fa-eye me-2"></i>Preview
+                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-lg" onclick="console.log('Submit button clicked'); console.log('Form data:', new FormData(document.querySelector('form'))); return true;">
+                                        <i class="fas fa-arrow-right me-2"></i>Choose Template
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-lg ms-2" onclick="submitFormWithoutValidation()">
+                                        <i class="fas fa-bolt me-2"></i>Force Submit
+                                    </button>
+                                </div>
+                            </div>
+                            </div> <!-- Close eventDetailsForm -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.image-upload-container {
+    position: relative;
+}
+
+.image-preview {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.image-preview:hover {
+    border-color: #0d6efd;
+    background-color: #f0f8ff;
+}
+
+.gallery-preview {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.gallery-preview img {
+    transition: transform 0.3s ease;
+}
+
+.gallery-preview img:hover {
+    transform: scale(1.05);
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Drag and drop styling */
+.image-upload-container.dragover {
+    border-color: #0d6efd;
+    background-color: #f0f8ff;
+}
+
+.image-upload-container.dragover .form-control {
+    border-color: #0d6efd;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function showEventForm(eventType) {
+    document.getElementById('eventDetailsForm').style.display = 'block';
+    document.getElementById('eventDetailsForm').scrollIntoView({ behavior: 'smooth' });
+    
+    // Hide all event-specific fields first
+    const allEventFields = ['weddingFields', 'birthdayFields', 'anniversaryFields', 'babyshowerFields', 'graduationFields', 'retirementFields'];
+    allEventFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) field.style.display = 'none';
+    });
+    
+    // Show appropriate fields based on event type
+    switch(eventType) {
+        case 'wedding':
+            document.getElementById('weddingFields').style.display = 'block';
+            document.getElementById('brideName').required = true;
+            document.getElementById('groomName').required = true;
+            break;
+        case 'birthday':
+            document.getElementById('birthdayFields').style.display = 'block';
+            document.getElementById('birthdayPerson').required = true;
+            break;
+        case 'anniversary':
+            document.getElementById('anniversaryFields').style.display = 'block';
+            document.getElementById('husbandName').required = true;
+            document.getElementById('wifeName').required = true;
+            document.getElementById('years').required = true;
+            break;
+        case 'babyshower':
+            document.getElementById('babyshowerFields').style.display = 'block';
+            document.getElementById('motherName').required = true;
+            document.getElementById('fatherName').required = true;
+            break;
+        case 'graduation':
+            document.getElementById('graduationFields').style.display = 'block';
+            document.getElementById('graduateName').required = true;
+            document.getElementById('degree').required = true;
+            document.getElementById('school').required = true;
+            break;
+        case 'retirement':
+            document.getElementById('retirementFields').style.display = 'block';
+            document.getElementById('honoreeName').required = true;
+            break;
+    }
+}
+
+function previewInvitation() {
+    const formData = new FormData(document.querySelector('form'));
+    const eventType = formData.get('eventType');
+    const religiousType = formData.get('religiousType');
+    
+    if (!eventType || !religiousType) {
+        alert('Please select both event type and religious type first');
+        return;
+    }
+    
+    // Create a simple preview modal or new window
+    const previewWindow = window.open('', '_blank', 'width=800,height=600');
+    previewWindow.document.write(`
+        <html>
+            <head>
+                <title>Invitation Preview</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            </head>
+            <body class="bg-light">
+                <div class="container py-4">
+                    <div class="card shadow">
+                        <div class="card-body text-center">
+                            <h2>Preview - ${formData.get('eventTitle') || 'Your Event'}</h2>
+                            <p>Event Type: ${eventType}</p>
+                            <p>Religious Type: ${religiousType}</p>
+                            <p>Family: ${formData.get('familyName') || 'Family Name'}</p>
+                            <p>Date: ${formData.get('eventDate')}</p>
+                            <p>Time: ${formData.get('eventTime')}</p>
+                            <p>Venue: ${formData.get('venue')}</p>
+                            <small class="text-muted">This is a basic preview. Full design will be applied after template selection.</small>
+                        </div>
+                    </div>
+                </div>
+            </body>
+        </html>
+    `);
+}
+
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function previewMultipleImages(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const grid = document.getElementById('galleryPreviewGrid');
+    
+    if (input.files && input.files.length > 0) {
+        grid.innerHTML = ''; // Clear existing previews
+        
+        Array.from(input.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-4 col-lg-3';
+                col.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${e.target.result}" alt="Gallery Preview ${index + 1}" 
+                             class="img-fluid rounded shadow-sm" style="height: 100px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 bg-primary text-white rounded-circle p-1 m-1" 
+                             style="width: 24px; height: 24px; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+                            ${index + 1}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(col);
+            }
+            reader.readAsDataURL(file);
+        });
+        
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const dateInput = document.getElementById('eventDate');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    
+    // Auto-generate event title based on event type and family name
+    const eventTypeInputs = document.querySelectorAll('input[name="eventType"]');
+    const eventTitleInput = document.getElementById('eventTitle');
+    const familyNameInput = document.getElementById('familyName');
+    
+    function updateEventTitle() {
+        const selectedEventType = document.querySelector('input[name="eventType"]:checked');
+        if (selectedEventType && familyNameInput.value) {
+            const eventType = selectedEventType.value;
+            const familyName = familyNameInput.value;
+            
+            let suggestion = '';
+            switch(eventType) {
+                case 'wedding':
+                    suggestion = `${familyName} Wedding Celebration`;
+                    break;
+                case 'birthday':
+                    suggestion = `${familyName} Birthday Party`;
+                    break;
+                case 'anniversary':
+                    suggestion = `${familyName} Anniversary Celebration`;
+                    break;
+                case 'babyshower':
+                    suggestion = `${familyName} Baby Shower`;
+                    break;
+                case 'graduation':
+                    suggestion = `${familyName} Graduation Party`;
+                    break;
+                case 'retirement':
+                    suggestion = `${familyName} Retirement Party`;
+                    break;
+            }
+            
+            if (suggestion && !eventTitleInput.value) {
+                eventTitleInput.value = suggestion;
+            }
+        }
+    }
+    
+    eventTypeInputs.forEach(input => {
+        input.addEventListener('change', updateEventTitle);
+    });
+    
+    familyNameInput.addEventListener('input', updateEventTitle);
+});
+
+function validateForm() {
+    try {
+        console.log('Form validation started');
+        
+        // Check if event type is selected
+        const eventType = document.querySelector('input[name="eventType"]:checked');
+        if (!eventType) {
+            alert('Please select an event type');
+            return false;
+        }
+        console.log('Event type selected:', eventType.value);
+        
+        // Check if religious type is selected
+        const religiousType = document.querySelector('input[name="religiousType"]:checked');
+        if (!religiousType) {
+            alert('Please select a religious/cultural type');
+            return false;
+        }
+        console.log('Religious type selected:', religiousType.value);
+        
+        // Check required fields
+        const requiredFields = ['familyName', 'eventTitle', 'eventDate', 'eventTime', 'venue', 'address', 'hostName'];
+        for (let field of requiredFields) {
+            const element = document.getElementById(field);
+            if (element && element.hasAttribute('required') && !element.value.trim()) {
+                console.log(`Missing required field: ${field}`);
+                alert(`Please fill in ${field}`);
+                element.focus();
+                return false;
+            }
+        }
+        console.log('All required fields filled');
+        
+        // Check event-specific required fields
+        const eventTypeValue = eventType.value;
+        if (eventTypeValue === 'wedding') {
+            const brideName = document.getElementById('brideName');
+            const groomName = document.getElementById('groomName');
+            if (!brideName.value.trim() || !groomName.value.trim()) {
+                console.log('Missing bride or groom name');
+                alert('Please fill in both bride and groom names');
+                return false;
+            }
+        }
+        
+        console.log('Form validation passed - submitting form');
+        return true;
+    } catch (error) {
+        console.error('Validation error:', error);
+        alert('An error occurred during validation. Please try again.');
+        return false;
+    }
+}
+
+function submitFormWithoutValidation() {
+    console.log('Force submitting form without validation');
+    const form = document.querySelector('form');
+    if (form) {
+        console.log('Form found, submitting...');
+        form.submit();
+    } else {
+        console.error('Form not found');
+        alert('Form not found');
+    }
+}
+</script>
+{% endblock %}

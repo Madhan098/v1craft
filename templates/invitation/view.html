@@ -1,0 +1,426 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ event_data.eventTitle }} - EventCraft Pro{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <!-- Invitation Card -->
+                <div class="invitation-card card shadow-lg border-0" 
+                     style="background: linear-gradient(135deg, {{ template.color_scheme | default('#e91e63') if template.color_scheme == 'rose' else '#FFD700' if template.color_scheme == 'gold' else '#FF69B4' if template.color_scheme == 'pink' else '#4169E1' if template.color_scheme == 'blue' else '#4CAF50' if template.color_scheme == 'green' else '#9C27B0' }}20, {{ template.color_scheme | default('#e91e63') if template.color_scheme == 'rose' else '#FFD700' if template.color_scheme == 'gold' else '#FF69B4' if template.color_scheme == 'pink' else '#4169E1' if template.color_scheme == 'blue' else '#4CAF50' if template.color_scheme == 'green' else '#9C27B0' }}10); font-family: {{ template.font_family if template.font_family else 'Georgia, serif' }};">
+                    
+                    <!-- Family Name Header -->
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <div class="invitation-icon mb-3">
+                            <span class="fs-1">
+                                {% if template.emoji_theme and template.emoji_theme.strip() %}
+                                    {{ template.emoji_theme[0] if template.emoji_theme else '🎉' }}
+                                {% else %}
+                                    🎉
+                                {% endif %}
+                            </span>
+                        </div>
+                        <h2 class="display-6 fw-bold mb-2" style="color: #2c3e50;">{{ invitation.family_name or event_data.familyName }}</h2>
+                        <p class="text-muted mb-0">cordially invites you to</p>
+                    </div>
+
+                    <!-- Main Image -->
+                    {% if invitation.main_image %}
+                    <div class="text-center mb-4">
+                        <img src="{{ url_for('static', filename='uploads/' + invitation.main_image) }}" 
+                             class="img-fluid rounded-3 shadow" 
+                             style="max-height: 300px; object-fit: cover;" 
+                             alt="Main Photo">
+                    </div>
+                    {% else %}
+                    <!-- Default Image Based on Event Type -->
+                    <div class="text-center mb-4">
+                        <div class="default-image-placeholder p-4 rounded-3 border" style="background-color: #f8f9fa;">
+                            {% if event_data.eventType == 'wedding' %}
+                                <div class="fs-1 mb-2">👰🤵💍</div>
+                                <p class="text-muted">Wedding Celebration</p>
+                            {% elif event_data.eventType == 'birthday' %}
+                                <div class="fs-1 mb-2">🎂🎉🎈</div>
+                                <p class="text-muted">Birthday Celebration</p>
+                            {% elif event_data.eventType == 'anniversary' %}
+                                <div class="fs-1 mb-2">💑❤️🌹</div>
+                                <p class="text-muted">Anniversary Celebration</p>
+                            {% else %}
+                                <div class="fs-1 mb-2">🎊✨🎉</div>
+                                <p class="text-muted">Special Celebration</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Event Details -->
+                    <div class="card-body text-center">
+                        <h1 class="display-5 fw-bold mb-4" style="color: #2c3e50;">{{ event_data.eventTitle }}</h1>
+                        
+                        <div class="event-details mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <i class="fas fa-calendar-alt fa-2x mb-2" style="color: #e74c3c;"></i>
+                                        <h6 class="fw-bold">Date</h6>
+                                        <p class="mb-0">{{ event_data.eventDate }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <i class="fas fa-clock fa-2x mb-2" style="color: #f39c12;"></i>
+                                        <h6 class="fw-bold">Time</h6>
+                                        <p class="mb-0">{{ event_data.eventTime }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="detail-item">
+                                        <i class="fas fa-map-marker-alt fa-2x mb-2" style="color: #27ae60;"></i>
+                                        <h6 class="fw-bold">Venue</h6>
+                                        <p class="mb-1">{{ event_data.venue }}</p>
+                                        <small class="text-muted">{{ event_data.address }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if event_data.description %}
+                        <div class="event-description mb-4 p-3 bg-light rounded">
+                            <p class="mb-0 fst-italic">{{ event_data.description }}</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Gallery Section -->
+                        {% if invitation.gallery_images and invitation.gallery_images != '[]' %}
+                        <div class="gallery-section mb-4">
+                            <h5 class="mb-3">Our Memories</h5>
+                            <p class="text-muted mb-3">All Pre Event & Celebration Moments</p>
+                            <div class="row g-3">
+                                {% set gallery_list = invitation.gallery_images | tojson | from_json %}
+                                {% for image in gallery_list %}
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="gallery-item" onclick="openGalleryModal('{{ url_for('static', filename='uploads/' + image) }}')">
+                                        <img src="{{ url_for('static', filename='uploads/' + image) }}" 
+                                             class="img-fluid gallery-image" 
+                                             style="height: 150px; object-fit: cover; border-radius: 10px;"
+                                             alt="Gallery Image">
+                                        <div class="gallery-overlay">
+                                            <i class="fas fa-search-plus text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Gallery Modal -->
+                        <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content bg-transparent border-0">
+                                    <div class="modal-header border-0">
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Gallery Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- RSVP Section -->
+                        <div class="rsvp-section bg-light rounded p-4 mb-4">
+                            <h5 class="mb-3">Will you be attending?</h5>
+                            
+                            {% if not session.get('rsvp_submitted_' + invitation.share_url) %}
+                            <form method="POST" action="{{ url_for('rsvp_response', share_url=invitation.share_url) }}" id="rsvpForm">
+                                <div class="mb-3">
+                                    <div class="btn-group d-flex" role="group">
+                                        <input type="radio" class="btn-check" name="response" id="rsvp-yes" value="yes" required>
+                                        <label class="btn btn-outline-success flex-fill" for="rsvp-yes">
+                                            <i class="fas fa-check me-2"></i>Yes, I'll be there!
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="response" id="rsvp-no" value="no" required>
+                                        <label class="btn btn-outline-danger flex-fill" for="rsvp-no">
+                                            <i class="fas fa-times me-2"></i>Sorry, can't make it
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="response" id="rsvp-maybe" value="maybe" required>
+                                        <label class="btn btn-outline-warning flex-fill" for="rsvp-maybe">
+                                            <i class="fas fa-question me-2"></i>Maybe
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" name="guest_name" placeholder="Your Name *" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control" name="guest_email" placeholder="Your Email">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="tel" class="form-control" name="guest_phone" placeholder="Your Phone">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number" class="form-control" name="guest_count" placeholder="Number of Guests" value="1" min="1" max="10">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <textarea class="form-control" name="message" rows="3" placeholder="Any special message or dietary requirements..."></textarea>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit RSVP
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-lg" id="addToCalendar" style="display: none;">
+                                        <i class="fas fa-calendar-plus me-2"></i>Add to Calendar
+                                    </button>
+                                </div>
+                            </form>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Thank you for your RSVP! We've received your response.
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Share Section -->
+                        <div class="share-section text-center mb-4">
+                            <h6 class="mb-3">Share this invitation</h6>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-primary" onclick="shareWhatsApp()">
+                                    <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                                </button>
+                                <button type="button" class="btn btn-outline-info" onclick="shareTwitter()">
+                                    <i class="fab fa-twitter me-1"></i>Twitter
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" onclick="shareFacebook()">
+                                    <i class="fab fa-facebook me-1"></i>Facebook
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="copyLink()">
+                                    <i class="fas fa-copy me-1"></i>Copy Link
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        {% if event_data.contactPhone or event_data.contactEmail %}
+                        <div class="contact-info border-top pt-3">
+                            <h6 class="mb-2">For any queries, contact:</h6>
+                            <p class="mb-1"><strong>{{ event_data.hostName }}</strong></p>
+                            {% if event_data.contactPhone %}
+                                <p class="mb-1"><i class="fas fa-phone me-2"></i>{{ event_data.contactPhone }}</p>
+                            {% endif %}
+                            {% if event_data.contactEmail %}
+                                <p class="mb-0"><i class="fas fa-envelope me-2"></i>{{ event_data.contactEmail }}</p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Made with EventCraft Pro -->
+                <div class="text-center mt-4">
+                    <p class="text-muted">
+                        Made with ❤️ using 
+                        <a href="{{ url_for('index') }}" class="text-decoration-none fw-bold" style="color: #e74c3c;">
+                            EventCraft Pro
+                        </a>
+                    </p>
+                    <a href="{{ url_for('auth') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Create Your Own Invitation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="galleryModalImage" class="img-fluid" alt="Gallery Image">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// RSVP response handling
+document.addEventListener('DOMContentLoaded', function() {
+    const rsvpInputs = document.querySelectorAll('input[name="response"]');
+    const addToCalendarBtn = document.getElementById('addToCalendar');
+    
+    rsvpInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'yes' && addToCalendarBtn) {
+                addToCalendarBtn.style.display = 'inline-block';
+            } else if (addToCalendarBtn) {
+                addToCalendarBtn.style.display = 'none';
+            }
+        });
+    });
+    
+    if (addToCalendarBtn) {
+        addToCalendarBtn.addEventListener('click', function() {
+            addToGoogleCalendar();
+        });
+    }
+});
+
+// Gallery modal
+function openGalleryModal(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
+    new bootstrap.Modal(document.getElementById('galleryModal')).show();
+}
+
+// Google Calendar integration
+function addToGoogleCalendar() {
+    const eventTitle = "{{ event_data.eventTitle }}";
+    const eventDate = "{{ event_data.eventDate }}";
+    const eventTime = "{{ event_data.eventTime }}";
+    const venue = "{{ event_data.venue }}";
+    const address = "{{ event_data.address }}";
+    
+    // Create date-time string for Google Calendar
+    const startDateTime = new Date(eventDate + 'T' + eventTime).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const endDateTime = new Date(new Date(eventDate + 'T' + eventTime).getTime() + 2 * 60 * 60 * 1000).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDateTime}/${endDateTime}&location=${encodeURIComponent(venue + ', ' + address)}&details=${encodeURIComponent('You are invited to ' + eventTitle)}`;
+    
+    window.open(googleCalendarUrl, '_blank');
+}
+
+// Share functions
+function shareWhatsApp() {
+    const url = window.location.href;
+    const text = "You're invited to {{ event_data.eventTitle }}! Check out the invitation:";
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+}
+
+function shareTwitter() {
+    const url = window.location.href;
+    const text = "You're invited to {{ event_data.eventTitle }}!";
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+}
+
+function shareFacebook() {
+    const url = window.location.href;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+}
+
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        // Show temporary success message
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('btn-success');
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-secondary');
+        }, 2000);
+    });
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.gallery-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.gallery-image {
+    transition: transform 0.3s ease;
+}
+
+.gallery-image:hover {
+    transform: scale(1.05);
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 123, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+/* Modal Styles */
+.modal-content {
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.detail-item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.btn-check:checked + .btn {
+    transform: scale(1.05);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+.default-image-placeholder {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .btn-group .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
